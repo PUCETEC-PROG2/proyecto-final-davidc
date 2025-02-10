@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - Mi Tienda{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div class="row flex-column flex-md-row align-items-center gap-3">
+    {% if user.is_authenticated %}
+    <h1>Bienvenido, {{ user.username }}</h1>
+    {% else %}
+    <h1>Hola! :)</h1>
+    <p>Nos alegra que hayas vuelto, bienvenido a nuestro catálogo Casas y departamentos usados</p>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Imagen">
+                <div class="card-body">
+                    <h5 class="card-title">Catálogo</h5>
+                    <p class="card-text">Explora todos los productos disponibles en la tienda.</p>
+                    <a href="{% url 'catalogo' %}" class="btn btn-primary">Ver catálogo</a>
+                </div>
+            </div>
+        </div>
+
+        {% if user.is_staff %}
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Imagen">
+                <div class="card-body">
+                    <h5 class="card-title">Clientes</h5>
+                    <p class="card-text">Administra la información de los clientes.</p>
+                    <a href="{% url 'clientes' %}" class="btn btn-success">Gestionar clientes</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Imagen">
+                <div class="card-body">
+                    <h5 class="card-title">Compras</h5>
+                    <p class="card-text">Revisa y gestiona las compras realizadas.</p>
+                    <a href="{% url 'compras' %}" class="btn btn-warning">Ver compras</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+    </div>
+    
+</div>
+{% endblock %}
+
+
