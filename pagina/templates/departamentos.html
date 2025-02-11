@@ -1,0 +1,31 @@
+<!-- filepath: /c:/Users/Usuario/Desktop/Proyectos/Git/ProyectoIntProgramacion2/AppInmobiliaria/pagina/templates/display_departamento.html -->
+{% extends "base.html" %}
+{% block title %}Departamentos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Departamentos</h1>
+    {% if departamentos %}
+        <div class="row">
+            {% for propiedad in departamentos %}
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        {% if propiedad.imagen %}
+                            <img src="{{ propiedad.imagen.url }}" class="card-img-top" alt="{{ propiedad.nombre }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sin imagen">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ propiedad.nombre }}</h5>
+                            <p class="card-text">Precio: {{ propiedad.precio }}</p>
+                            <a href="{% url 'detalle_propiedad' propiedad.slug %}" class="btn btn-primary">Ver detalles</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No se encontraron departamentos.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -72,3 +72,9 @@ def catalogo(request):
 def set_theme(request, theme):
     request.session['theme'] = theme
     return render(request, 'home.html', {'theme': theme})
+
+def departamentos(request):
+    # Suponiendo que en el modelo Propiedad existe un campo o relación que indique la categoría.
+    # Por ejemplo, si tienes un ForeignKey a "Categoria" y el nombre de la categoría es "Departamento":
+    departamentos = Propiedad.objects.filter(categoria__nombre__iexact='departamentos')
+    return render(request, 'departamentos.html', {'departamentos': departamentos})

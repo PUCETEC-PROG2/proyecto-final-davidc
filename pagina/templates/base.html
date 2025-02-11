@@ -200,18 +200,18 @@
                         <a class="btn btn-outline-primary mx-1" href="{% url 'home' %}"> • Inicio</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="btn btn-outline-primary mx-1 dropdown-toggle" href="{% url 'catalogo' %}"
+                        <a class="btn btn-outline-primary mx-1 dropdown-toggle"
                             id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Catálogo
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            {% for categoria in categorias %}
-                            <li>
-                                <a class="dropdown-item">
-                                    {{ categoria.nombre }}
-                                </a>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-primary mx-1" href="{% url 'departamentos' %}">  Departamentos</a>
                             </li>
-                            {% endfor %}
+                            <!-- Botón para Casas -->
+                            <li class="nav-item">
+                                <a class="btn btn-outline-primary mx-1" >  Casas</a>
+                            </li>
                         </ul>
                     </li>
                     {% if not user.is_staff %}
@@ -279,7 +279,7 @@
                 color: "#004D40",      // Texto en verde oscuro para buen contraste
                 primaryColor: "#26A69A"
             },
-            
+
             {
                 name: "Oscuro Gris",
                 background: "#2C2C2C",  // Gris oscuro
