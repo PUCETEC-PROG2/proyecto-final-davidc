@@ -35,7 +35,7 @@ class Categoria(models.Model):
 
 class Propiedad(models.Model):
     nombre = models.CharField(max_length=100)
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True, max_length=100)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     descripcion = models.TextField()
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name='propiedades')
@@ -44,10 +44,11 @@ class Propiedad(models.Model):
     habitaciones = models.PositiveIntegerField()
     banos = models.PositiveIntegerField()
     estado = models.CharField(max_length=20, choices=[('disponible', 'Disponible'), ('vendido', 'Vendido')], default='disponible')
+    imagen = models.ImageField(upload_to='propiedades/', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.nombre)
+            self.slug = slugify(self.nombre)[:100]
         super().save(*args, **kwargs)
 
 
