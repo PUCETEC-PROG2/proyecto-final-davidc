@@ -3,6 +3,43 @@
 
 {% block content %}
 {% load static %}
-
-[...]
+<div class="container mt-4">
+    <h1>Lista de Clientes</h1>
+    <!-- Botón para agregar un nuevo cliente -->
+    <a class="btn btn-success mb-3" href="{% url 'cliente_create' %}">Agregar Cliente</a>
+    
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Primer Nombre</th>
+                <th>Segundo Nombre</th>
+                <th>Primer Apellido</th>
+                <th>Segundo Apellido</th>
+                <th>Cédula</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+            <tr>
+                <td>{{ cliente.primer_nombre }}</td>
+                <td>{{ cliente.segundo_nombre }}</td>
+                <td>{{ cliente.primer_apellido }}</td>
+                <td>{{ cliente.segundo_apellido }}</td>
+                <td>{{ cliente.cedula }}</td>
+                <td>
+                    <!-- Botón para editar -->
+                    <a class="btn btn-primary" href="{% url 'cliente_edit' cliente.id %}">Editar</a>
+                    <!-- Botón para eliminar con confirmación -->
+                    <a class="btn btn-danger" href="{% url 'cliente_delete' cliente.id %}">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No se encontraron clientes.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

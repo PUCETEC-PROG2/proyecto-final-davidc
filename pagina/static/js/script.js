@@ -11,6 +11,12 @@ const themes = [
         primaryColor: "#80CBC4" // Conservando el tono suave de teal
     },
     {
+        name: "Menta Vistosa",
+        background: "#A8E6CF", // Fondo mint más vibrante
+        color: "#004D40",      // Texto en verde oscuro para buen contraste
+        primaryColor: "#26A69A"
+    },
+    {
         name: "Oscuro Gris",
         background: "#2C2C2C",  // Gris oscuro
         color: "#FFFFFF",

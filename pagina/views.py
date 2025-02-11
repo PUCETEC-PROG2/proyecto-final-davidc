@@ -1,8 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Propiedad
+from .models import Cliente
+
+from .models import Cliente
+from .forms import ClienteForm
+
+
 
 def home(request):
     propiedades_recientes = Propiedad.objects.all().order_by("-id")[:5]
@@ -20,6 +26,38 @@ def is_staff(user):
 @user_passes_test(is_staff)
 def clientes(request):
     return render(request, 'clientes.html')
+
+def clientes_list(request):
+    clientes = Cliente.objects.all()
+    return render(request, "clientes.html", {"clientes": clientes})
+
+def cliente_create(request):
+    if request.method == 'POST':
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('clientes_list')
+    else:
+        form = ClienteForm()
+    return render(request, 'cliente_form.html', {'form': form})
+
+def cliente_edit(request, cliente_id):
+    cliente = get_object_or_404(Cliente, id=cliente_id)
+    if request.method == 'POST':
+        form = ClienteForm(request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            return redirect('clientes_list')
+    else:
+        form = ClienteForm(instance=cliente)
+    return render(request, 'cliente_form.html', {'form': form})
+
+def cliente_delete(request, cliente_id):
+    cliente = get_object_or_404(Cliente, id=cliente_id)
+    if request.method == 'POST':
+        cliente.delete()
+        return redirect('clientes_list')
+    return render(request, 'cliente_confirm_delete.html', {'cliente': cliente})
 
 @login_required
 @user_passes_test(is_staff)
