@@ -7,22 +7,35 @@
 
 <div class="row flex-column flex-md-row align-items-center gap-3">
     {% if user.is_authenticated %}
-    <h1>Bienvenido, {{ user.username }}</h1>
+        <h1>Bienvenido, {{ user.username }}</h1>
     {% else %}
-    <h1>Hola! :)</h1>
-    <p>Nos alegra que hayas vuelto, bienvenido a nuestro catálogo Casas y departamentos usados</p>
+        <h1>Hola! :)</h1>
+        <p>Nos alegra que hayas vuelto, bienvenido a nuestro catálogo Casas y departamentos usados</p>
     {% endif %}
     <div class="row">
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Imagen">
-                <div class="card-body">
-                    <h5 class="card-title">Catálogo</h5>
-                    <p class="card-text">Explora todos los productos disponibles en la tienda.</p>
-                    <a href="{% url 'catalogo' %}" class="btn btn-primary">Ver catálogo</a>
+        {% if propiedades_recientes %}
+            {% for propiedad in propiedades_recientes %}
+                <div class="col-md-4">
+                    <div class="card">
+                        {% if propiedad.imagen %}
+                            <img src="{{ propiedad.imagen.url }}" class="card-img-top" alt="{{ propiedad.nombre }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sin imagen">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ propiedad.nombre }}</h5>
+                            <p class="card-text">Precio: {{ propiedad.precio }}</p>
+                            <a class="btn btn-primary">Ver detalles</a>
+
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            {% endfor %}
+        {% else %}
+            <p>No hay propiedades recientes.</p>
+            <p>Cantidad de propiedades recientes: {{ propiedades_recientes.count }}</p>
+
+        {% endif %}
 
         {% if user.is_staff %}
         <div class="col-md-4">
