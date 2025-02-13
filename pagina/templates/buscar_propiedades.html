@@ -1,14 +1,15 @@
-<!-- filepath: /c:/Users/Usuario/Desktop/Proyectos/Git/ProyectoIntProgramacion2/AppInmobiliaria/pagina/templates/display_departamento.html -->
 {% extends "base.html" %}
-{% block title %}Departamentos{% endblock %}
+
+{% block title %}Buscador{% endblock %}
 
 {% block content %}
 {% load static %}
+
 <div class="container mt-4">
-    <h1>Departamentos</h1>
-    {% if departamentos %}
+    {% if resultados %}
+        <h2>Resultados para: "{{ query }}"</h2>
         <div class="row">
-            {% for propiedad in departamentos %}
+            {% for propiedad in resultados %}
                 <div class="col-md-4 mb-3">
                     <div class="card">
                         {% if propiedad.imagen %}
@@ -19,14 +20,13 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ propiedad.nombre }}</h5>
                             <p class="card-text">Precio: {{ propiedad.precio }}</p>
-                            <a class="btn btn-primary">Ver detalles</a>
+                            <a href="#" class="btn btn-primary">Ver detalles</a>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-        <p>No se encontraron departamentos.</p>
+        <p>No se encontraron resultados para la búsqueda "{{ query }}".</p>
     {% endif %}
-</div>
 {% endblock %}

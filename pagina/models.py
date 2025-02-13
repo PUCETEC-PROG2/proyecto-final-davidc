@@ -46,6 +46,10 @@ class Propiedad(models.Model):
     estado = models.CharField(max_length=20, choices=[('disponible', 'Disponible'), ('vendido', 'Vendido')], default='disponible')
     imagen = models.ImageField(upload_to='propiedades/', null=True, blank=True)
 
+    def vender(self):
+        self.estado = 'vendido'
+        self.save()
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.nombre)[:100]
@@ -85,7 +89,7 @@ class Cliente(models.Model):
 class Compra(models.Model):
     propiedad = models.ForeignKey(Propiedad, on_delete=models.CASCADE, related_name='compras')
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='compras')
-    fecha_compra = models.DateTimeField(auto_now_add=True)
+    fecha_compra = models.DateTimeField()  # Elimina auto_now_add=True
     precio_sin_iva = models.DecimalField(max_digits=10, decimal_places=2)
     precio_con_iva = models.DecimalField(max_digits=10, decimal_places=2, editable=False)  # Precio con IVA
 
@@ -94,6 +98,7 @@ class Compra(models.Model):
             self.precio_sin_iva = self.propiedad.precio  # Toma el precio automáticamente
         self.precio_con_iva = round(self.precio_sin_iva * 1.15, 2)
         super().save(*args, **kwargs)
+        self.propiedad.vender()
 
     def __str__(self):
         return f"Compra de {self.propiedad.nombre} por {self.cliente.primer_nombre} {self.cliente.primer_apellido}- ${self.precio_con_iva} (con IVA)"

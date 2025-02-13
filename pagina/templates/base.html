@@ -190,9 +190,10 @@
 
 
 
-            <img src="https://cdn-icons-png.flaticon.com/512/10740/10740591.png" alt="illustration"
-                class="illustration" />
-            <a class="navbar-brand" href="{% url 'home' %}"></a>
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="https://cdn-icons-png.flaticon.com/512/10740/10740591.png" alt="illustration"
+                    class="illustration" />
+            </a>
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
@@ -210,7 +211,7 @@
                             </li>
                             <!-- Botón para Casas -->
                             <li class="nav-item">
-                                <a class="btn btn-outline-primary mx-1" >  Casas</a>
+                                <a class="btn btn-outline-primary mx-1" href="{% url 'casas' %}">  Casas</a>
                             </li>
                         </ul>
                     </li>
@@ -234,9 +235,14 @@
             </div>
 
             <div class="form-container">
+                <form method="GET" action="{% url 'buscar_propiedades' %}">
+                    <input type="text" name="q" value="{{ query }}" placeholder="Buscar productos...">
+                    <button type="submit">Buscar</button>
+                </form>
                 {% if user.is_authenticated %}
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
+                
 
                     <button type="submit" class="btn btn-danger">Salir</button>
                 </form>
@@ -258,7 +264,7 @@
 
     </div>
     <div class="theme-btn-container"></div>
-    {% block extra_js %}
+{% block extra_js %}
     <script type="text/javascript">
         const themes = [
             {
@@ -324,4 +330,5 @@
                 });
         }
     </script>
-    {% endblock extra_js %}
+    
+{% endblock extra_js %} 

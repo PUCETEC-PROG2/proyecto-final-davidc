@@ -15,5 +15,10 @@ urlpatterns = [
     path('clientes/edit/<int:cliente_id>/', views.cliente_edit, name='cliente_edit'),
     path('clientes/delete/<int:cliente_id>/', views.cliente_delete, name='cliente_delete'),
     path('compras/', views.compras, name='compras'),
+    path('compras/create/', views.compra_create, name='compras_create'),
+    path('compras/<int:compra_id>/', views.compra_detail, name='compras_detail'),
     path('departamentos/', views.departamentos, name='departamentos'),
+    path('casas/', views.casas, name='casas'),
+    path('buscar/', views.buscar_propiedades, name='buscar_propiedades'),
+
 ]   

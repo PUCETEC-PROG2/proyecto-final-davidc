@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>{{ title }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.cliente.id_for_label }}">Cliente:</label>
+            {{ form.cliente }}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.fecha_compra.id_for_label }}">Fecha de Compra:</label>
+            {{ form.fecha_compra }}
+        </div> 
+        
+        
+        <div class="form-group">
+            <label for="{{ form.propiedades.id_for_label }}">Propiedades:</label>
+            {{ form.propiedades }}
+        </div>
+        <div id="total-precio">Total: $0</div>
+        <p> </p>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="{% url 'compras' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script>
+    $(function(){
+        $('.datepicker').datepicker({
+            format: 'yyyy-mm-dd',
+            startDate: '0d',
+            autoclose: true
+        });
+
+        // Función para calcular el total
+        function calcularTotal() {
+            var total = 0;
+            $('input[name="propiedades"]:checked').each(function() {
+                total += parseFloat($(this).data('precio'));
+            });
+            $('#total-precio').text('Total: $' + total.toFixed(2));
+        }
+
+        // Asignar el evento change a los checkboxes
+        $('input[name="propiedades"]').change(function() {
+            calcularTotal();
+        });
+
+        // Calcular el total inicial al cargar la página
+        calcularTotal();
+    });
+</script>
+{% endblock %}
