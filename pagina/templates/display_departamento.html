@@ -1,10 +1,39 @@
 {% extends "base.html" %}
+{% load static %}  {# Carga la biblioteca de etiquetas estáticas #}
 
 {% block title %}{{ propiedad.nombre }}{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
     <h1>{{ propiedad.nombre }}</h1>
+    <style>
+        .propiedad-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .imagenes-container {
+            display: flex;
+            overflow-x: auto;
+            margin-bottom: 10px;
+        }
+
+        .imagenes-container img {
+            width: 200px;
+            height: 150px;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        .whatsapp-button {
+            background-color: #25D366;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
     <div class="row">
         <div class="col-md-6">
             <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
@@ -17,11 +46,11 @@
                 </div>
                 <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Anterior</span>
+                    <span class="sr-only"></span>
                 </a>
                 <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Siguiente</span>
+                    <span class="sr-only"></span>
                 </a>
             </div>
         </div>
@@ -32,7 +61,7 @@
             <p><strong>Metros cuadrados:</strong> {{ propiedad.metros_cuadrados }}</p>
             <p><strong>Habitaciones:</strong> {{ propiedad.habitaciones }}</p>
             <p><strong>Baños:</strong> {{ propiedad.banos }}</p>
-            <a href="https://wa.me/NUMERODETELEFONO?text=Me%20interesa%20el%20departamento%20{{ propiedad.nombre }}" class="btn btn-success">Contactar por WhatsApp</a>
+            <a href="https://wa.me/NUMERODETELEFONO?text=Me%20interesa%20el%20departamento%20{{ propiedad.nombre }}" class="whatsapp-button">Contactar por WhatsApp</a>
         </div>
     </div>
     <a href="{% url 'departamentos' %}" class="btn btn-secondary">Volver a la lista</a>
