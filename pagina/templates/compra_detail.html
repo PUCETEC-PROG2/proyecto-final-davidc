@@ -5,7 +5,12 @@
 {% block content %}
 <div class="container mt-4">
     <h1>Detalle de Compra</h1>
-    <p><strong>Propiedad:</strong> {{ compra.propiedad.nombre }}</p>
+    <p><strong>Propiedades:</strong></p>
+    <ul>
+        {% for propiedad in compra.propiedades.all %}
+            <li>{{ propiedad.nombre }}</li>
+        {% endfor %}
+    </ul>
     <p><strong>Cliente:</strong> {{ compra.cliente.primer_nombre }} {{ compra.cliente.primer_apellido }}</p>
     <p><strong>Cédula del Cliente:</strong> {{ compra.cliente.cedula }}</p>
     <p><strong>Fecha de Compra:</strong> {{ compra.fecha_compra }}</p>

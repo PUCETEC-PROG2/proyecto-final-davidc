@@ -1,19 +1,18 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Propiedad
 from .models import Cliente
 from django.db.models import Q
-from django.db import connection
 from .models import Compra
 from .models import Cliente
 from .forms.ClienteForm import ClienteForm
 from .forms.CompraForm import CompraForm
 from django.db.models import Sum
 from .models import Compra
-
-
+from .generar_contrato_pdf import generar_contrato_pdf # Importa la función para generar el contrato PDF
+from django.core.files import File  # Importa File para guardar el contrato en el sistema de archivos
+from decimal import Decimal  # Importa Decimal
 
 def home(request):
     propiedades_recientes = Propiedad.objects.all().order_by("-id")[:5]
@@ -81,6 +80,10 @@ def departamentos(request):
     departamentos = Propiedad.objects.filter(categoria__nombre__iexact='departamentos')
     return render(request, 'departamentos.html', {'departamentos': departamentos})
 
+def display_departamento(request, slug):
+    departamento = get_object_or_404(Propiedad, slug=slug)
+    return render(request, 'display_departamento.html', {'propiedad': departamento})
+
 def casas(request):
     casas = Propiedad.objects.filter(categoria__nombre__iexact='casas')
     return render(request, 'casas.html', {'casas': casas}) 
@@ -103,20 +106,37 @@ def compras(request):
     compras = Compra.objects.all()
     return render(request, 'compras.html', {'compras': compras})
 
+def compra_detail(request, compra_id):
+    compra = get_object_or_404(Compra, pk=compra_id)
+    return render(request, 'compra_detail.html', {'compra': compra}) 
+
+
 def compra_create(request):
     if request.method == 'POST':
         form = CompraForm(request.POST)
         if form.is_valid():
             compra = form.save(commit=False)
-            compra.precio_sin_iva = compra.propiedades.aggregate(Sum('precio'))['precio__sum'] or 0
-            compra.precio_con_iva = compra.precio_sin_iva * 1.15
+            
+            # Save the compra first
+            propiedades_seleccionadas = form.cleaned_data['propiedades']
+            
+            # Calculate prices
+            compra.precio_sin_iva = propiedades_seleccionadas.aggregate(Sum('precio'))['precio__sum'] or 0
+            compra.precio_con_iva = compra.precio_sin_iva * Decimal('1.15')  # Convierte 1.15 a Decimal
+            
             compra.save()
-            form.save_m2m()
+            form.save_m2m()  # This saves the many-to-many relationships
+            # Generate PDF with selected properties
+            # try:
+            #     generar_contrato_pdf(compra, propiedades_seleccionadas)
+                
+            #     # Save the contract
+            #     with open(f"contrato_{compra.id}.pdf", 'rb') as f:
+            #         compra.contrato.save(f"contrato_{compra.id}.pdf", File(f), save=True)
+            # except Exception as e:
+            #     print(f"Error generating or saving contract: {e}")
+
             return redirect('compras')
     else:
         form = CompraForm()
     return render(request, 'compra_form.html', {'form': form, 'title': 'Crear Compra'})
-
-def compra_detail(request, compra_id):
-    compra = get_object_or_404(Compra, pk=compra_id)
-    return render(request, 'compra_detail.html', {'compra': compra})

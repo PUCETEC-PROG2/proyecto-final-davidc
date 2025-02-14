@@ -18,8 +18,9 @@
                         {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">{{ propiedad.nombre }}</h5>
-                            <p class="card-text">Precio: {{ propiedad.precio }}</p>
-                            <a class="btn btn-primary">Ver detalles</a>
+                            <p class="card-text">Precio: {{ propiedad.precio }}</p> 
+                            <a href="{% url 'display_departamento' propiedad.slug %}" class="btn btn-primary">Ver detalles</a>
+
                         </div>
                     </div>
                 </div>

@@ -45,6 +45,8 @@ class Propiedad(models.Model):
     banos = models.PositiveIntegerField()
     estado = models.CharField(max_length=20, choices=[('disponible', 'Disponible'), ('vendido', 'Vendido')], default='disponible')
     imagen = models.ImageField(upload_to='propiedades/', null=True, blank=True)
+    numero_particular = models.CharField(max_length=50, blank=True, null=True)  # Agrega este campo
+
 
     def vender(self):
         self.estado = 'vendido'
@@ -58,6 +60,13 @@ class Propiedad(models.Model):
 
     def __str__(self):
         return f"{self.nombre} - {self.categoria.nombre}"
+    
+class PropiedadImagen(models.Model):
+    propiedad = models.ForeignKey(Propiedad, on_delete=models.CASCADE, related_name='imagenes')
+    imagen = models.ImageField(upload_to='propiedad_imagenes/')
+
+    def __str__(self):
+        return f"Imagen de {self.propiedad.nombre}"
     
 class Cliente(models.Model):
     primer_nombre = models.CharField(max_length=20)
@@ -87,18 +96,18 @@ class Cliente(models.Model):
         return f"{self.primer_nombre} {self.segundo_nombre or ''} {self.primer_apellido} {self.segundo_apellido or ''}".strip()
 
 class Compra(models.Model):
-    propiedad = models.ForeignKey(Propiedad, on_delete=models.CASCADE, related_name='compras')
+    propiedades = models.ManyToManyField(Propiedad, related_name='compras')
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='compras')
     fecha_compra = models.DateTimeField()  # Elimina auto_now_add=True
     precio_sin_iva = models.DecimalField(max_digits=10, decimal_places=2)
     precio_con_iva = models.DecimalField(max_digits=10, decimal_places=2, editable=False)  # Precio con IVA
-
+    contrato = models.FileField(upload_to='contratos/', null=True, blank=True)
+    
     def save(self, *args, **kwargs):
-        if not self.precio_sin_iva:
-            self.precio_sin_iva = self.propiedad.precio  # Toma el precio automáticamente
-        self.precio_con_iva = round(self.precio_sin_iva * 1.15, 2)
         super().save(*args, **kwargs)
-        self.propiedad.vender()
+        # Vende cada propiedad asociada a la compra
+        for propiedad in self.propiedades.all():
+            propiedad.vender()
 
     def __str__(self):
-        return f"Compra de {self.propiedad.nombre} por {self.cliente.primer_nombre} {self.cliente.primer_apellido}- ${self.precio_con_iva} (con IVA)"
+        return f"Compra de {', '.join(p.nombre for p in self.propiedades.all())} por {self.cliente.primer_nombre} {self.cliente.primer_apellido}- ${self.precio_con_iva} (con IVA)"

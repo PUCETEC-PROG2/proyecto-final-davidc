@@ -12,7 +12,7 @@ class PropiedadTableWidget(forms.CheckboxSelectMultiple):
         str_values = {str(v) for v in value} if value else set()  # Verifica si value es None
         for i, (option_value, option_label) in enumerate(self.choices):
             # Obtener la instancia de Propiedad
-            propiedad_id = option_value.value  # Obtener el ID de la propiedad
+            propiedad_id = option_value[0]  # Obtener el ID de la propiedad
             propiedad = Propiedad.objects.get(pk=propiedad_id)
             output += ['<tr>']
             output += ['<td>{}</td>'.format(propiedad.id)]
@@ -33,23 +33,24 @@ class PropiedadTableWidget(forms.CheckboxSelectMultiple):
         return format_html('\n'.join(output))
 
 class CompraForm(forms.ModelForm):
-    cliente = forms.ModelChoiceField(
-        queryset=Cliente.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
     propiedades = forms.ModelMultipleChoiceField(
         queryset=Propiedad.objects.filter(estado='disponible'),
-        widget=PropiedadTableWidget(attrs={'class': 'form-check-input'})
+        widget=forms.CheckboxSelectMultiple,
+        label="Propiedades"
     )
-    fecha_compra = forms.DateField(
-        widget=forms.DateInput(attrs={'class': 'form-control datepicker'})
+    cliente = forms.ModelChoiceField(
+        queryset=Cliente.objects.all(),
+        label="Cliente"
+    )
+    fecha_compra = forms.DateTimeField(
+        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        label="Fecha de Compra"
     )
 
     class Meta:
         model = Compra
-        fields = ['cliente', 'propiedades', 'fecha_compra']
+        fields = ['propiedades', 'cliente', 'fecha_compra']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['propiedades'].label = "Seleccione las propiedades:" 
-
+        self.fields['propiedades'].label = "Seleccione las propiedades:"

@@ -18,6 +18,7 @@ urlpatterns = [
     path('compras/create/', views.compra_create, name='compras_create'),
     path('compras/<int:compra_id>/', views.compra_detail, name='compras_detail'),
     path('departamentos/', views.departamentos, name='departamentos'),
+    path('departamentos/<slug:slug>/', views.display_departamento, name='display_departamento'),
     path('casas/', views.casas, name='casas'),
     path('buscar/', views.buscar_propiedades, name='buscar_propiedades'),
 

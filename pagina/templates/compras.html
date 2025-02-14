@@ -12,21 +12,33 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Propiedad</th>
+                <th>Propiedades</th>
                 <th>Cliente Nombres</th>
                 <th>Cliente Cedula</th>
                 <th>Acciones</th>
+                <th>Contrato</th>
             </tr>
         </thead>
         <tbody>
             {% for compra in compras %}
             <tr>
-                <td>{{ compra.propiedad.nombre }}</td>
+                <td>
+                    {% for propiedad in compra.propiedades.all %}
+                        {{ propiedad.nombre }}<br>
+                    {% endfor %}
+                </td>
                 <td>{{ compra.cliente.primer_nombre }} {{ compra.cliente.primer_apellido }}</td>
                 <td>{{ compra.cliente.cedula }}</td>
                 <td>
                     <!-- Botón para ver detalles -->
-                    <a class="btn btn-info" href="{% url 'compras_detail' compra.id %}">Ver Detalles</a>
+                    <a class="btn btn-info" href="{% url 'compras_detail' compra.id %}">Detalles</a>
+                </td> 
+                <td>
+                    {% if compra.contrato %}
+                        <a href="{{ compra.contrato.url }}" target="_blank">Descargar Contrato</a>
+                    {% else %}
+                        No disponible
+                    {% endif %}
                 </td>
             </tr>
             {% empty %}
