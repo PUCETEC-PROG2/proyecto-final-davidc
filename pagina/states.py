@@ -13,4 +13,6 @@ class EstadoDisponible(EstadoPropiedad):
 
 class EstadoVendido(EstadoPropiedad):
     def cambiar_estado(self, propiedad):
-        return False
+        return False 
+    
+##Patron de diseño
