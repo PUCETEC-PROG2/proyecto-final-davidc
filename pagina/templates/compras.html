@@ -7,7 +7,7 @@
     <h1>Lista de Compras</h1>
 
     <!-- Botón para agregar una nueva compra -->
-    <a class="btn btn-success mb-3" href="{% url 'compras_create' %}" >Agregar Compra</a>
+    <a class="btn btn-success mb-3" href="{% url 'crear_compra' %}" >Agregar Compra</a>
 
     <table class="table table-bordered">
         <thead>
@@ -31,11 +31,11 @@
                 <td>{{ compra.cliente.cedula }}</td>
                 <td>
                     <!-- Botón para ver detalles -->
-                    <a class="btn btn-info" href="{% url 'compras_detail' compra.id %}">Detalles</a>
+                    <a class="btn btn-info">Detalles</a>
                 </td> 
                 <td>
                     {% if compra.contrato %}
-                        <a href="{{ compra.contrato.url }}" target="_blank">Descargar Contrato</a>
+                        <a target="_blank">Descargar Contrato</a>
                     {% else %}
                         No disponible
                     {% endif %}

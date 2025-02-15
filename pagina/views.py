@@ -12,9 +12,10 @@ from .models import Compra
 from .generar_contrato_pdf import generar_contrato_pdf # Importa la función para generar el contrato PDF
 from django.core.files import File  # Importa File para guardar el contrato en el sistema de archivos
 from decimal import Decimal  # Importa Decimal
-#from .forms.CompraForm import CompraForm
-
-
+from .forms.CompraForm import CompraForm
+from django.db import transaction
+from django.contrib import messages
+from django.core.exceptions import ValidationError
 
 def home(request):
     propiedades_recientes = Propiedad.objects.all().order_by("-id")[:5]
@@ -116,6 +117,48 @@ def compra_detail(request, compra_id):
     compra = get_object_or_404(Compra, pk=compra_id)
     return render(request, 'compra_detail.html', {'compra': compra})  
 
-
+@login_required
+@transaction.atomic
+def crear_compra(request):
+    if request.method == 'POST':
+        form = CompraForm(request.POST)
+        if form.is_valid():
+            try:
+                with transaction.atomic():
+                    compra = form.save(commit=False)
+                    propiedades_seleccionadas = form.cleaned_data['propiedades']
+                    
+                    # Verificar que todas las propiedades estén disponibles
+                    for propiedad in propiedades_seleccionadas:
+                        if not propiedad.esta_disponible():
+                            raise ValidationError(f"La propiedad {propiedad.nombre} ya no está disponible")
+                    
+                    # Calcular el precio total
+                    precio_total = sum(p.precio for p in propiedades_seleccionadas)
+                    compra.precio_sin_iva = precio_total
+                    compra.save()
+                    
+                    # Guardar las propiedades seleccionadas
+                    form.save_m2m()
+                    
+                    # Cambiar el estado de las propiedades
+                    for propiedad in propiedades_seleccionadas:
+                        propiedad.vender()
+                    
+                    messages.success(request, "Compra realizada exitosamente")
+                    return redirect('compras')
+                    
+            except ValidationError as e:
+                form.add_error(None, str(e))
+            except Exception as e:
+                form.add_error(None, f"Error al procesar la compra: {str(e)}")
+    else:
+        form = CompraForm()
+    
+    propiedades = Propiedad.objects.filter(estado='disponible')
+    return render(request, 'crear_compra.html', {
+        'form': form,
+        'propiedades': propiedades
+    })
 
 

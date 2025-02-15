@@ -2,6 +2,8 @@ from django.db import models
 from django.core.validators import EmailValidator, RegexValidator
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
+from decimal import Decimal  # Agregar esta importación
+from .states import EstadoDisponible, EstadoVendido
 
 
 
@@ -47,16 +49,30 @@ class Propiedad(models.Model):
     imagen = models.ImageField(upload_to='propiedades/', null=True, blank=True)
     numero_particular = models.CharField(max_length=50, blank=True, null=True)  # Agrega este campo
 
-
-    def vender(self):
-        self.estado = 'vendido'
-        self.save()
-
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.nombre)[:100]
         super().save(*args, **kwargs)
 
+
+    @property
+    def estado_actual(self):
+        if self.estado == 'disponible':
+            return EstadoDisponible()
+        return EstadoVendido()
+
+    def vender(self):
+        if self.esta_disponible():
+            self.estado = 'vendido'
+            self.save()
+            return True
+        return False
+
+    def esta_disponible(self):
+        return self.estado == 'disponible'
+
+    def get_estado_display(self):
+        return dict(self._meta.get_field('estado').choices)[self.estado]
 
     def __str__(self):
         return f"{self.nombre} - {self.categoria.nombre}"
@@ -98,16 +114,24 @@ class Cliente(models.Model):
 class Compra(models.Model):
     propiedades = models.ManyToManyField(Propiedad, related_name='compras')
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='compras')
-    fecha_compra = models.DateTimeField()  # Elimina auto_now_add=True
+    fecha_compra = models.DateTimeField()
     precio_sin_iva = models.DecimalField(max_digits=10, decimal_places=2)
-    precio_con_iva = models.DecimalField(max_digits=10, decimal_places=2, editable=False)  # Precio con IVA
+    precio_con_iva = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
     contrato = models.FileField(upload_to='contratos/', null=True, blank=True)
     
     def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        
+        if self.precio_sin_iva:
+            self.precio_con_iva = self.precio_sin_iva * Decimal('1.15')
+        
         super().save(*args, **kwargs)
-        # Vende cada propiedad asociada a la compra
-        for propiedad in self.propiedades.all():
-            propiedad.vender()
+        
+        if is_new:  # Solo si es una nueva compra
+            propiedades_list = list(self.propiedades.all())
+            for propiedad in propiedades_list:
+                if propiedad.esta_disponible():
+                    propiedad.vender()
 
     def __str__(self):
         return f"Compra de {', '.join(p.nombre for p in self.propiedades.all())} por {self.cliente.primer_nombre} {self.cliente.primer_apellido}- ${self.precio_con_iva} (con IVA)"
