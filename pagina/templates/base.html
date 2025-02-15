@@ -242,7 +242,7 @@
                     </li>
                     {% if not user.is_staff %}
                     <li class="nav-item">
-                        <a class="btn btn-outline-primary mx-1">Contactos</a>
+                        <a class="btn btn-outline-primary mx-1" href="{% url 'contactos' %}">Contactos</a>
                     </li>
                     {% endif %}
                     {% if user.is_staff %}

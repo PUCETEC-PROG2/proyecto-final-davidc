@@ -115,7 +115,8 @@ def compras(request):
 def compra_detail(request, compra_id):
     compra = get_object_or_404(Compra, pk=compra_id)
     return render(request, 'compra_detail.html', {'compra': compra})  
-
+def contactos(request):
+    return render(request, 'contactos.html')
 
 
 
