@@ -4,6 +4,7 @@
 
 {% block content %}
 <div class="container mt-4">
+    
     <h1>Detalle de Compra</h1>
     <p><strong>Propiedades:</strong></p>
     <ul>
@@ -14,6 +15,6 @@
     <p><strong>Cliente:</strong> {{ compra.cliente.primer_nombre }} {{ compra.cliente.primer_apellido }}</p>
     <p><strong>Cédula del Cliente:</strong> {{ compra.cliente.cedula }}</p>
     <p><strong>Fecha de Compra:</strong> {{ compra.fecha_compra }}</p>
-    <a href="{% url 'compras' %}" class="btn btn-secondary">Volver a la lista</a>
+    
 </div>
 {% endblock %}

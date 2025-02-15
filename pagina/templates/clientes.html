@@ -6,7 +6,7 @@
 <div class="container mt-4">
     <h1>Lista de Clientes</h1>
     <!-- Botón para agregar un nuevo cliente -->
-    <a class="btn btn-success mb-3" href="{% url 'cliente_create' %}">Agregar Cliente</a>
+    <a class="btn btn-success mb-3" href="{% url 'cliente_create' %}"><i class="bi bi-plus-circle-fill"></i></a>
     
     <table class="table table-bordered">
         <thead>
@@ -29,9 +29,16 @@
                 <td>{{ cliente.cedula }}</td>
                 <td>
                     <!-- Botón para editar -->
-                    <a class="btn btn-primary" href="{% url 'cliente_edit' cliente.id %}">Editar</a>
+                    <a class="btn" href="{% url 'cliente_edit' cliente.id %}">
+                        <i class="bi bi-pencil-square"></i>
+                        
+                    </a>
                     <!-- Botón para eliminar con confirmación -->
-                    <a class="btn btn-danger" href="{% url 'cliente_delete' cliente.id %}">Eliminar</a>
+                    <a class="btn btn-danger btn-sm d-inline-flex align-items-center gap-2 ms-2" href="{% url 'cliente_delete' cliente.id %}" 
+                    >
+                        <i class="bi bi-trash-fill"></i>
+                        
+                    </a>
                 </td>
             </tr>
             {% empty %}

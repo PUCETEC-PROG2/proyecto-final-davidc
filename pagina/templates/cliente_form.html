@@ -3,11 +3,186 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h1>{% if form.instance.pk %}Editar Cliente{% else %}Crear Cliente{% endif %}</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Guardar</button>
-    </form>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div>
+                    <h4 class="mb-0">
+                        <p> </p>
+                        {% if form.instance.pk %}
+                            " <i class="bi bi-pencil-square"></i>  Editar Cliente
+                        {% else %}
+                            <i class="bi bi-person-plus-fill"></i>  Nuevo Cliente
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" novalidate>
+                        {% csrf_token %}
+                        
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.primer_nombre.id_for_label }}" class="form-label">
+                                    {{ form.primer_nombre.label }}*
+                                </label>
+                                {{ form.primer_nombre }}
+                                {% if form.primer_nombre.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.primer_nombre.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.segundo_nombre.id_for_label }}" class="form-label">
+                                    {{ form.segundo_nombre.label }}
+                                </label>
+                                {{ form.segundo_nombre }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.primer_apellido.id_for_label }}" class="form-label">
+                                    {{ form.primer_apellido.label }}*
+                                </label>
+                                {{ form.primer_apellido }}
+                                {% if form.primer_apellido.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.primer_apellido.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.segundo_apellido.id_for_label }}" class="form-label">
+                                    {{ form.segundo_apellido.label }}
+                                </label>
+                                {{ form.segundo_apellido }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.cedula.id_for_label }}" class="form-label">
+                                    {{ form.cedula.label }}*
+                                </label>
+                                {{ form.cedula }}
+                                {% if form.cedula.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.cedula.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">
+                                    {{ form.email.label }}*
+                                </label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.email.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.telefono.id_for_label }}" class="form-label">
+                                    {{ form.telefono.label }}*
+                                </label>
+                                {{ form.telefono }}
+                                {% if form.telefono.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.telefono.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.telefono_fijo.id_for_label }}" class="form-label">
+                                    {{ form.telefono_fijo.label }}
+                                </label>
+                                {{ form.telefono_fijo }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.direccion.id_for_label }}" class="form-label">
+                                {{ form.direccion.label }}*
+                            </label>
+                            {{ form.direccion }}
+                            {% if form.direccion.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.direccion.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mt-4 d-flex justify-content-end gap-2">
+                            <a href="{% url 'clientes_list' %}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle"></i> Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    .card {
+        border-radius: 10px;
+        border: none;
+    }
+    
+    .card-header {
+        border-radius: 10px 10px 0 0 !important;
+    }
+    
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control {
+        border-radius: 5px;
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .form-control:focus {
+        border-color: #198754;
+        box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+    }
+    
+    .invalid-feedback {
+        font-size: 0.875rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .btn i {
+        font-size: 1.1rem;
+    }
+</style>
 {% endblock %}

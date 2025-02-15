@@ -4,6 +4,7 @@ from django.utils.text import slugify
 from django.core.exceptions import ValidationError
 from decimal import Decimal  # Agregar esta importación
 from .states import EstadoDisponible, EstadoVendido
+from .utils.pdf_generator import generar_contrato  # Agregar esta importación
 
 
 
@@ -125,13 +126,25 @@ class Compra(models.Model):
         if self.precio_sin_iva:
             self.precio_con_iva = self.precio_sin_iva * Decimal('1.15')
         
+        # Primer guardado para obtener el ID
         super().save(*args, **kwargs)
         
         if is_new:  # Solo si es una nueva compra
-            propiedades_list = list(self.propiedades.all())
-            for propiedad in propiedades_list:
+            # Forzar la recarga de las relaciones many-to-many
+            self.refresh_from_db()
+            
+            # Generar el contrato después de que todas las relaciones estén guardadas
+            try:
+                filename = generar_contrato(self)
+                self.contrato.name = f'contratos/{filename}'
+                super().save(update_fields=['contrato'])
+            except Exception as e:
+                print(f"Error al generar el contrato: {e}")
+            
+            # Cambiar estado de las propiedades
+            for propiedad in self.propiedades.all():
                 if propiedad.esta_disponible():
-                    propiedad.vender()
-
+                    propiedad.vender() 
+                    
     def __str__(self):
         return f"Compra de {', '.join(p.nombre for p in self.propiedades.all())} por {self.cliente.primer_nombre} {self.cliente.primer_apellido}- ${self.precio_con_iva} (con IVA)"
