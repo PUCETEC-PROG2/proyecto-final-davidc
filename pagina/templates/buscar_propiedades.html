@@ -12,16 +12,47 @@
             {% for propiedad in resultados %}
                 <div class="col-md-4 mb-3">
                     <div class="card">
-                        {% if propiedad.imagen %}
-                            <img src="{{ propiedad.imagen.url }}" class="card-img-top" alt="{{ propiedad.nombre }}">
+                        {% if propiedad.categoria.nombre == 'Casas' %}
+                            <a href="{% url 'display_casa' propiedad.slug %}">
+                                {% if propiedad.imagen %}
+                                    <img src="{{ propiedad.imagen.url }}" class="card-img-top" alt="{{ propiedad.nombre }}">
+                                {% else %}
+                                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sin imagen">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ propiedad.nombre }}</h5> 
+                                    <p class="card-text">Precio: {{ propiedad.precio }}</p>
+                                    <p>Categoría: {{ propiedad.categoria.nombre }}</p>
+                                </div>
+                            </a>
+                        {% elif propiedad.categoria.nombre == 'Departamentos' %}
+                            <a href="{% url 'display_departamento' propiedad.slug %}">
+                                {% if propiedad.imagen %}
+                                    <img src="{{ propiedad.imagen.url }}" class="card-img-top" alt="{{ propiedad.nombre }}">
+                                {% else %}
+                                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sin imagen">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ propiedad.nombre }}</h5> 
+                            </a>
+                                    <p class="card-text">Precio: {{ propiedad.precio }}</p>
+                                    <p>Categoría: {{ propiedad.categoria.nombre }}</p>
+                                    
+                                </div>
                         {% else %}
-                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sin imagen">
+                            <a href="#">
+                                {% if propiedad.imagen %}
+                                    <img src="{{ propiedad.imagen.url }}" class="card-img-top" alt="{{ propiedad.nombre }}">
+                                {% else %}
+                                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sin imagen">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ propiedad.nombre }}</h5> 
+                            </a>
+                                    <p class="card-text">Precio: {{ propiedad.precio }}</p>
+                                    <p>Categoría: {{ propiedad.categoria.nombre }}</p>
+                                </div>
                         {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title">{{ propiedad.nombre }}</h5>
-                            <p class="card-text">Precio: {{ propiedad.precio }}</p>
-                            <a href="#" class="btn btn-primary">Ver detalles</a>
-                        </div>
                     </div>
                 </div>
             {% endfor %}
@@ -30,3 +61,4 @@
         <p>No se encontraron resultados para la búsqueda "{{ query }}".</p>
     {% endif %}
 {% endblock %}
+

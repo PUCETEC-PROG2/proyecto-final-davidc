@@ -7,12 +7,14 @@ from django.db.models import Q
 from .models import Compra
 from .models import Cliente
 from .forms.ClienteForm import ClienteForm
-from .forms.CompraForm import CompraForm
 from django.db.models import Sum
 from .models import Compra
 from .generar_contrato_pdf import generar_contrato_pdf # Importa la función para generar el contrato PDF
 from django.core.files import File  # Importa File para guardar el contrato en el sistema de archivos
 from decimal import Decimal  # Importa Decimal
+#from .forms.CompraForm import CompraForm
+
+
 
 def home(request):
     propiedades_recientes = Propiedad.objects.all().order_by("-id")[:5]
@@ -88,6 +90,10 @@ def casas(request):
     casas = Propiedad.objects.filter(categoria__nombre__iexact='casas')
     return render(request, 'casas.html', {'casas': casas}) 
 
+def display_casa(request, slug):
+    casa = get_object_or_404(Propiedad, slug=slug)
+    return render(request, 'display_casa.html', {'propiedad': casa})
+
 def buscar_propiedades(request):
     query = request.GET.get('q', '')
     if query:
@@ -108,35 +114,8 @@ def compras(request):
 
 def compra_detail(request, compra_id):
     compra = get_object_or_404(Compra, pk=compra_id)
-    return render(request, 'compra_detail.html', {'compra': compra}) 
+    return render(request, 'compra_detail.html', {'compra': compra})  
 
 
-def compra_create(request):
-    if request.method == 'POST':
-        form = CompraForm(request.POST)
-        if form.is_valid():
-            compra = form.save(commit=False)
-            
-            # Save the compra first
-            propiedades_seleccionadas = form.cleaned_data['propiedades']
-            
-            # Calculate prices
-            compra.precio_sin_iva = propiedades_seleccionadas.aggregate(Sum('precio'))['precio__sum'] or 0
-            compra.precio_con_iva = compra.precio_sin_iva * Decimal('1.15')  # Convierte 1.15 a Decimal
-            
-            compra.save()
-            form.save_m2m()  # This saves the many-to-many relationships
-            # Generate PDF with selected properties
-            # try:
-            #     generar_contrato_pdf(compra, propiedades_seleccionadas)
-                
-            #     # Save the contract
-            #     with open(f"contrato_{compra.id}.pdf", 'rb') as f:
-            #         compra.contrato.save(f"contrato_{compra.id}.pdf", File(f), save=True)
-            # except Exception as e:
-            #     print(f"Error generating or saving contract: {e}")
 
-            return redirect('compras')
-    else:
-        form = CompraForm()
-    return render(request, 'compra_form.html', {'form': form, 'title': 'Crear Compra'})
+

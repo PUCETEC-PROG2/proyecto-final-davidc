@@ -4,7 +4,12 @@
 {% block title %}{{ propiedad.nombre }}{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container mt-4"> 
+    <a href="{% url 'departamentos' %}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i>    
+    </a>
+    <h1> </h1> 
+    <p> </p>
     <h1>{{ propiedad.nombre }}</h1>
     <style>
         .propiedad-container {
@@ -55,16 +60,21 @@
             </div>
         </div>
         <div class="col-md-6">
+            <p> </p>
+
+            <a href="https://wa.me/0963610118?text=Me%20interesa%20la%20casa%20{{ propiedad.nombre }}" class="whatsapp-button">
+                <i class="bi bi-whatsapp"></i> Contactar WhatsApp
+            </a>            
+            
+            <p> </p>
             <p><strong>Precio:</strong> {{ propiedad.precio }}</p>
             <p><strong>Descripción:</strong> {{ propiedad.descripcion }}</p>
             <p><strong>Ubicación:</strong> {{ propiedad.ubicacion }}</p>
             <p><strong>Metros cuadrados:</strong> {{ propiedad.metros_cuadrados }}</p>
             <p><strong>Habitaciones:</strong> {{ propiedad.habitaciones }}</p>
             <p><strong>Baños:</strong> {{ propiedad.banos }}</p>
-            <a href="https://wa.me/NUMERODETELEFONO?text=Me%20interesa%20el%20departamento%20{{ propiedad.nombre }}" class="whatsapp-button">Contactar por WhatsApp</a>
         </div>
     </div>
-    <a href="{% url 'departamentos' %}" class="btn btn-secondary">Volver a la lista</a>
 </div>
 {% endblock %} 
 {% block extra_js %}

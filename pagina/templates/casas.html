@@ -10,15 +10,22 @@
             {% for propiedad in casas %}
                 <div class="col-md-4 mb-3">
                     <div class="card">
-                        {% if propiedad.imagen %}
-                            <img src="{{ propiedad.imagen.url }}" class="card-img-top" alt="{{ propiedad.nombre }}">
-                        {% else %}
-                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sin imagen">
+                        <a href="{% url 'display_casa' propiedad.slug %}">
+                            {% if propiedad.imagen %}
+                                <img src="{{ propiedad.imagen.url }}" class="card-img-top" alt="{{ propiedad.nombre }}">
+                            {% else %}
+                                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sin imagen">
+                            
+                        </a>
+
                         {% endif %}
                         <div class="card-body">
-                            <h5 class="card-title">{{ propiedad.nombre }}</h5>
+                            <a href="{% url 'display_casa' propiedad.slug %}">
+                                <h5 class="card-title">{{ propiedad.nombre }}</h5>
+
+                            </a>
+
                             <p class="card-text">Precio: {{ propiedad.precio }}</p>
-                            <a class="btn btn-primary">Ver detalles</a>
                         </div>
                     </div>
                 </div>

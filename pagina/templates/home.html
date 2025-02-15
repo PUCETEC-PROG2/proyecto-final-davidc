@@ -7,65 +7,78 @@
 
 <div class="row flex-column flex-md-row align-items-center gap-3">
     {% if user.is_authenticated %}
-        <h1>Bienvenido, {{ user.username }}</h1>
+    <h1>Bienvenido, {{ user.username }}</h1>
     {% else %}
-        <h1>Hola! :)</h1>
-        <p>Nos alegra que hayas vuelto, bienvenido a nuestro catálogo Casas y departamentos usados</p>
+    <h1>Hola! :)</h1>
+    <p>Nos alegra que hayas vuelto, bienvenido a nuestro catálogo Casas y departamentos usados</p>
     {% endif %}
     <div class="row">
-        {% if propiedades_recientes %}
-            {% for propiedad in propiedades_recientes %}
-                <div class="col-md-4">
-                    <div class="card">
-                        {% if propiedad.imagen %}
-                            <img src="{{ propiedad.imagen.url }}" class="card-img-top" alt="{{ propiedad.nombre }}">
-                        {% else %}
-                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sin imagen">
-                        {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title">{{ propiedad.nombre }}</h5>
-                            <p class="card-text">Precio: {{ propiedad.precio }}</p>
-                            <a class="btn btn-primary">Ver detalles</a>
-
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p>No hay propiedades recientes.</p>
-            <p>Cantidad de propiedades recientes: {{ propiedades_recientes.count }}</p>
-
-        {% endif %}
-
-        {% if user.is_staff %}
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Imagen">
-                <div class="card-body">
-                    <h5 class="card-title">Clientes</h5>
-                    <p class="card-text">Administra la información de los clientes.</p>
-                    <a href="{% url 'clientes_list' %}" class="btn btn-success">Gestionar clientes</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Imagen">
-                <div class="card-body">
-                    <h5 class="card-title">Compras</h5>
-                    <p class="card-text">Revisa y gestiona las compras realizadas.</p>
-                    <a href="{% url 'compras' %}" class="btn btn-warning">Ver compras</a>
-                </div>
-            </div>
-        </div>
-        {% endif %}
         
+        {% if propiedades_recientes %}
+        {% for propiedad in propiedades_recientes %}
+        <div class="col-md-4">
+            <div class="card">
+                {% if propiedad.categoria.nombre == 'Casas' %}
+                    <a href="{% url 'display_casa' propiedad.slug %}">
+                        {% if propiedad.imagen %}
+                        <img src="{{ propiedad.imagen.url }}" class="card-img-top" alt="{{ propiedad.nombre }}">
+                        {% else %}
+                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sin imagen">
+                        {% endif %}
+                    </a>
+                {% elif propiedad.categoria.nombre == 'Departamentos' %}
+                        <a href="{% url 'display_departamento' propiedad.slug %}">
+                            {% if propiedad.imagen %}
+                            <img src="{{ propiedad.imagen.url }}" class="card-img-top" alt="{{ propiedad.nombre }}">
+                            {% else %}
+                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sin imagen">
+                            {% endif %}
+                        </a>
+                {% else %}
+                        <a href="#">
+                            {% if propiedad.imagen %}
+                            <img src="{{ propiedad.imagen.url }}" class="card-img-top" alt="{{ propiedad.nombre }}">
+                            {% else %}
+                            <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sin imagen">
+                            {% endif %}
+                        </a> {# Enlace genérico o a una página de error #}
+                {% endif %}
+
+                <div class="card-body">
+                    {% if propiedad.categoria.nombre == 'Casas' %}
+                        <a href="{% url 'display_casa' propiedad.slug %}">
+                            <h5 class="card-title">{{ propiedad.nombre }}</h5>
+                        </a>
+                    {% elif propiedad.categoria.nombre == 'Departamentos' %} 
+                        <a href="{% url 'display_departamento' propiedad.slug %}">
+                            <h5 class="card-title">{{ propiedad.nombre }}</h5> 
+                        </a>
+                    {% else %} 
+                        <a href="#">
+                            <h5 class="card-title">{{ propiedad.nombre }}</h5> 
+                        </a>
+                    {% endif %}
+
+                    <p class="card-text">Precio: ${{ propiedad.precio }}</p>
+                    <p>Categoría: {{ propiedad.categoria.nombre }}</p>
+                  
+                    
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>No hay propiedades recientes.</p>
+        <p>Cantidad de propiedades recientes: {{ propiedades_recientes.count }}</p>
+
+        {% endif %}
+
+        
+
     </div>
     <footer>
         <p>Derechos Reservados © 2025</p>
     </footer>
 </div>
 {% endblock %}
-
-

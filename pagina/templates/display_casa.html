@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}  {# Carga la biblioteca de etiquetas estáticas #}
+
+{% block title %}{{ propiedad.nombre }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <a href="{% url 'casas' %}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> 
+    </a> 
+    <p> </p>
+    <h1> </h1>
+    <h1>{{ propiedad.nombre }}</h1>
+    <style>
+        .propiedad-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .imagenes-container {
+            display: flex;
+            overflow-x: auto;
+            margin-bottom: 10px;
+        }
+
+        .imagenes-container img {
+            width: 200px;
+            height: 150px;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        .whatsapp-button {
+            background-color: #25D366;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+    <div class="row">
+        <div class="col-md-6">
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    {% for imagen in propiedad.imagenes.all %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <img class="d-block w-100" src="{{ imagen.imagen.url }}" alt="{{ propiedad.nombre }}">
+                        </div>
+                    {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only"></span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only"></span>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <p> </p>
+
+            <a href="https://wa.me/NUMERODETELEFONO?text=Me%20interesa%20la%20casa%20{{ propiedad.nombre }}" class="whatsapp-button">
+                <i class="bi bi-whatsapp"></i> Contactar WhatsApp
+            </a>            
+            
+            <p> </p>
+            <p><strong>Precio:</strong> {{ propiedad.precio }}</p>
+            <p><strong>Descripción:</strong> {{ propiedad.descripcion }}</p>
+            <p><strong>Ubicación:</strong> {{ propiedad.ubicacion }}</p>
+            <p><strong>Metros cuadrados:</strong> {{ propiedad.metros_cuadrados }}</p>
+            <p><strong>Habitaciones:</strong> {{ propiedad.habitaciones }}</p>
+            <p><strong>Baños:</strong> {{ propiedad.banos }}</p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}
