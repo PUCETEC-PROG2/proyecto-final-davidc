@@ -1,333 +1,387 @@
-{% load static %}
+                        {% load static %}
 
-<!DOCTYPE html>
-<html lang="es">
+                        <!DOCTYPE html>
+                        <html lang="es">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Mi Tienda{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+                        <head>
+                            <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>{% block title %}{% endblock %}</title>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
 
-    <style>
-        :root {
-            --background: #f8f3f3;
-            /* Gris claro con suficiente contraste */
-            --color: #222222;
-            /* Texto oscuro para contraste */
-            --primary-color: #20B2AA;
-            /* Mantienes tu color principal */
-        }
+                <style>
+                    :root {
+                        --background: #f8f3f3;
+                        --color: #222222;
+                        --primary-color: #20B2AA;
+                    }
 
-        body {
-            font-family: "Poppins", sans-serif;
-            background: var(--background);
-            color: var(--color);
-            margin: 0;
-            padding: 0;
+                    body {
+                        font-family: "Poppins", sans-serif;
+                        background: var(--background);
+                        color: var(--color);
+                        margin: 0;
+                        padding: 0;
+                    }
 
-        }
+                    .container-fluid {
+                        background: rgba(255, 255, 255, 0.1);
+                        backdrop-filter: blur(28px);
+                        -webkit-backdrop-filter: blur(16px);
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        border-radius: 20px;
+                        padding: 20px;
+                        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+                    }
 
-        /* NAVBAR Glassmorphism */
-        .container-fluid {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+                    .navbar {
+                        position: fixed;
+                        top: 170px; /* Ajusta este valor para aumentar el espacio superior */
+                        left: 50%;
+                        transform: translateX(-50%);
+                        width: 160%;
+                        max-width: 1800px;
+                        padding: 20px 30px;
+                        border-radius: 20px;
+                        background: transparent;
+                        z-index: 1000;
+                    }
 
-        }
+                    .navbar-brand {
+                        font-size: 1.5rem;
+                    }
 
-        .navbar {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 95%;
-            max-width: 1200px;
-            padding: 20px 30px;
-            border-radius: 20px;
-            background: transparent;
-            z-index: 1000;
-        }
+                    .navbar-nav .nav-link {
+                        font-size: 1.2rem;
+                        padding: 10px 15px;
+                        margin: 0 5px;
+                    }
 
+                    .navbar-nav .nav-link:hover {
+                        color: var(--colorr) !important;
+                    }
 
+                    .btn-danger {
+                        background-color: rgba(255, 0, 0, 0.7);
+                        border: none;
+                    }
 
-        .navbar-brand {
-            font-size: 1.5rem;
-            /* Larger brand text */
-        }
+                    .btn-danger:hover {
+                        background-color: rgba(255, 0, 0, 1);
+                    }
 
-        .navbar-nav .nav-link {
-            font-size: 1.2rem;
-            /* Larger nav links */
-            padding: 10px 15px;
-            /* More spacing around links */
-            margin: 0 5px;
-            /* Space between links */
-        }
+                    .container {
+                        margin-top: 350px; /* Ajusta este valor para aumentar el espacio superior */
+                    }
 
-        .navbar-nav .nav-link:hover {
-            color: var(--colorr) !important;
-        }
+                    .illustration {
+                        width: 100px;
+                        height: auto;
+                        max-width: 100%;
+                    }
 
-        /* Botón de cerrar sesión */
-        .btn-danger {
-            background-color: rgba(255, 0, 0, 0.7);
-            border: none;
-        }
+                    .opacity {
+                        opacity: 0.6;
+                    }
 
-        .btn-danger:hover {
-            background-color: rgba(255, 0, 0, 1);
-        }
+                    .btn-primary {
+                        background-color: var(--primary-color);
+                        color: white;
+                        border: none;
+                        padding: 15 px 15px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                    }
 
-        /* Espaciado para evitar que la navbar cubra el contenido */
-        .container {
-            margin-top: 230px
-        }
+                    .btn-primary:hover {
+                        background-color: #27ddd4;
+                    }
 
-        .illustration {
-            width: 100px;
-            /* Adjust this value as needed */
-            height: auto;
-            /* Maintains aspect ratio */
-            max-width: 100%;
+                    .form-container {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                    }
 
-        }
+                    .form-container form {
+                        margin: 0 5px;
+                    }
 
-        .opacity {
-            opacity: 0.6;
-        }
+                    .theme-btn-container {
+                        position: absolute;
+                        left: 50%;
+                        bottom: 20px;
+                        transform: translateX(-50%);
+                        width: 100%;
+                        text-align: center;
+                        z-index: 100;
+                    }
 
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-            /* Set text color to white */
-            border: none;
-            padding: 15 px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+                    .theme-btn {
+                        cursor: pointer;
+                        transition: all 0.3s ease-in;
+                    }
 
-        .btn-primary:hover {
-            /*background-color: darken(var(--primary-color), 10%);
-            /* Darken the background on hover */
+                    .theme-btn:hover {
+                        width: 40px !important;
+                    }
 
-            background-color: #27ddd4;
-        }
+                    .navbar-nav .nav-link {
+                        color: var(--color) !important;
+                        transition: color 0.3s ease-in-out;
+                    }
 
+                    .btn-outline-primary {
+                        border: none !important;
+                        border-color: var(--primary-color) !important;
+                        color: var(--color) !important;
+                    }
 
-        .form-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            /* Adjust the gap as needed */
-        }
+                    .btn-outline-primary-search {
+                        border: none !important;
+                        border-color: 9191911f !important;
+                        color: rgb(0, 0, 0) !important;
+                    }
 
-        .form-container form {
-            margin: 0 5px;
-            /* Add horizontal margin */
-        }
+                    .btn-outline-primary:hover {
+                        border: none !important;
+                        background-color: var(--primary-color);
+                        color: white !important;
+                    }
 
-        .theme-btn-container {
-            position: absolute;
-            left: 50%;
-            bottom: 20px;
-            transform: translateX(-50%);
-            width: 100%;
-            text-align: center;
-            z-index: 100;
-        }
+                    .nav-item.dropdown:hover>.dropdown-menu {
+                        display: block;
+                        margin-top: 0;
+                        border: none;
+                    }
 
-        .theme-btn {
-            cursor: pointer;
-            transition: all 0.3s ease-in;
-        }
+                    .dropdown-item:active,
+                    .dropdown-item:focus {
+                        background-color: #27ddd4 !important;
+                        color: white !important;
+                    }
 
-        .theme-btn:hover {
-            width: 40px !important;
-        }
+                    .search-container form input {
+                        padding: 14.5px;
+                        color: var(--color);
+                        background-color: #9191911f;
+                        border: none;
+                        letter-spacing: 0.8px;
+                        font-size: 15px;
+                        backdrop-filter: blur(15px);
+                        border-radius: 5px;
+                    }
 
-        .navbar-nav .nav-link {
-            color: var(--color) !important;
-            transition: color 0.3s ease-in-out;
-        }
+                    .search-container form input:focus {
+                        box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.2);
+                        animation: wobble 0.3s ease-in;
+                    }
 
-        .btn-outline-primary {
-            border: none !important;
-
-            border-color: var(--primary-color) !important;
-            color: var(--color) !important;
-        } 
-
-        .btn-outline-primary-search {
-            border: none !important;
-
-            border-color: 9191911f !important;
-            color: rgb(0, 0, 0) !important;
-        }
-
-        .btn-outline-primary:hover {
-            border: none !important;
-
-            background-color: var(--primary-color);
-            color: white !important;
-        }
-
-        .nav-item.dropdown:hover>.dropdown-menu {
-            display: block;
-            margin-top: 0;
-            /* Opcional: para ajustar el espacio */
-            border: none;
-        }
-
-        .dropdown-item:active,
-        .dropdown-item:focus {
-            background-color: #27ddd4 !important;
-            color: white !important;
-        } 
-
-        .search-container form input {
-            padding: 14.5px;
-            color: var(--color);
-            background-color: #9191911f;
-            border: none;
-            letter-spacing: 0.8px;
-            font-size: 15px;
-            backdrop-filter: blur(15px);
-            border-radius: 5px;
-        }
-        
-        .search-container form input:focus {
-            box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.2);
-            animation: wobble 0.3s ease-in;
-        }
-
-    </style>
-</head>
-
-<body>
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-
-
-
-            <a class="navbar-brand" href="{% url 'home' %}">
-                <img src="https://cdn-icons-png.flaticon.com/512/10740/10740591.png" alt="illustration"
-                    class="illustration" />
-            </a>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="btn btn-outline-primary mx-1" href="{% url 'home' %}">Inicio</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="btn btn-outline-primary mx-1 dropdown-toggle"
-                            id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Catálogo
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li class="nav-item">
-                                <a class="btn btn-outline-primary mx-1" href="{% url 'casas' %}">Casas</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="btn btn-outline-primary mx-1" href="{% url 'departamentos' %}">Departamentos</a>
-                            </li>
-                            <!-- Botón para Casas -->
-                        </ul>
-                    </li>
-                    {% if not user.is_staff %}
-                    <li class="nav-item">
-                        <a class="btn btn-outline-primary mx-1" href="{% url 'contactos' %}">Contactos</a>
-                    </li>
-                    {% endif %}
-                    {% if user.is_staff %}
-                    <li class="nav-item">
-                        <a class="btn btn-outline-primary mx-1" href="{% url 'clientes_list' %}">Clientes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-outline-primary mx-1" href="{% url 'compras' %}">Compras</a>
-                    </li>
-                    {% endif %}
-
-
-
-                </ul>
-            </div>
-
-            <div class="search-container"> 
-                <div class="form-container"> 
-                    <form method="GET" action="{% url 'buscar_propiedades' %}">
-                        <input type="text" name="q" value="{{ query }}" placeholder="Buscar productos...">
-                        <button type="submit" class="btn btn-outline-primary-search">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </form>
-                </div>
-                
-
-            </div> 
-
-            <div>
-                {% if user.is_authenticated %}
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                
-
-                    <button type="submit" class="btn btn-danger">
-                        <i class="bi bi-door-closed"></i>
-                    </button>
-                </form>
-                {% else %}
-                <form method="post" action="{% url 'login' %}">
-                    {% csrf_token %}
-                    <button class="btn btn-primary" type="submit">
-                        <i class="bi bi-door-open"></i>
-
-                    </button>
-
-                </form>
-                {% endif %}
-            </div>
-
-
-        </div>
-    </nav>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <div class="container">
-        {% block content %}{% endblock %}
-
-    </div>
-    
-    <div class="theme-btn-container"></div>
-{% block extra_js %}
-    <script type="text/javascript">
-        const themes = [
-            {
-                background: "#f8f3f3",
-                color: "#222222",
-                primaryColor: "#20B2AA"
-            },
-            {
-                name: "Gris Intenso",
-                background: "#e0e0e0", // Un gris más marcado
-                color: "#333333",      // Texto en gris oscuro para buen contraste
-                primaryColor: "#80CBC4" // Conservando el tono suave de teal
-            },
-           
+                    .info-bar {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        background-color: #f8f9fa;
+                        padding: 40px; /* Aumenta el padding para dar más espacio */
+                    }
             
+                    .info-image {
+                        max-height: 100px;
+                        margin-right: 20px;
+                    }
+            
+                    .info-text {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        text-align: center;
+                    }
+            
+                    .info-text p {
+                        margin: 0;
+                        font-size: 20px; /* Aumenta el tamaño del texto */
+                        font-weight: 500;
+                    }
+            
+                    .info-text i {
+                        margin-right: 5px;
+                    }
+                </style>
+            </head>
+            
+            <body>
+                <div class="info-bar">
+                    <img src="{% static 'logo_inicio/logo1.png' %}" alt="logo1.png" class="info-image">
+                    <div class="info-text">
+                        <p><i class="fas fa-phone-alt"></i> Teléfono: 0986606863</p>
+                    </div>
+                    <div class="info-text">
+                        <p><i class="fas fa-map-marker-alt"></i> Dirección: Av. 6 de Diciembre y 18 de Septiembre</p>
+                    </div>
+                </div>
 
-            {
-                name: "Oscuro Gris",
-                background: "#2C2C2C",  // Gris oscuro
-                color: "#FFFFFF",
-                primaryColor: "#40E0D0"
-            },
+                            <nav class="navbar navbar-expand-lg">
+                                <div class="container-fluid">
+                                    <a class="navbar-brand" href="{% url 'home' %}">Inicio</a>
+                                    <div class="collapse navbar-collapse" id="navbarNav">
+                                        <ul class="navbar-nav">
+                                            <li class="nav-item">
+                                                <a class="btn btn-outline-primary mx-1" href="{% url 'home' %}">Inicio</a>
+                                            </li>
+                                            <li class="nav-item dropdown">
+                                                <a class="btn btn-outline-primary mx-1 dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    Catálogo
+                                                </a>
+                                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                    <li class="nav-item">
+                                                        <a class="btn btn-outline-primary mx-1" href="{% url 'casas' %}">Casas</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="btn btn-outline-primary mx-1" href="{% url 'departamentos' %}">Departamentos</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            {% if not user.is_staff %}
+                                            <li class="nav-item">
+                                                <a class="btn btn-outline-primary mx-1" href="{% url 'contactos' %}">Contactos</a>
+                                            </li>
+                                            {% endif %}
+                                            {% if user.is_staff %}
+                                            <li class="nav-item">
+                                                <a class="btn btn-outline-primary mx-1" href="{% url 'clientes_list' %}">Clientes</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="btn btn-outline-primary mx-1" href="{% url 'compras' %}">Compras</a>
+                                            </li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </nav>
+
+                            <div class="theme-btn-container"></div>
+
+
+                            <nav class="navbar navbar-expand-lg">
+                                <div class="container-fluid">
+
+
+
+                                    <a class="navbar-brand" href="{% url 'home' %}">
+                                        <img src="{% static 'logo_inicio/logo2.png' %}" alt="logo2.png" class="info-image"
+                                            class="illustration" /> 
+                                    </a>
+
+                                    <div class="collapse navbar-collapse" id="navbarNav">
+                                        <ul class="navbar-nav">
+                                            <li class="nav-item">
+                                                <a class="btn btn-outline-primary mx-1" href="{% url 'home' %}">Inicio</a>
+                                            </li>
+                                            <li class="nav-item dropdown">
+                                                <a class="btn btn-outline-primary mx-1 dropdown-toggle"
+                                                    id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    Catálogo
+                                                </a>
+                                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                    <li class="nav-item">
+                                                        <a class="btn btn-outline-primary mx-1" href="{% url 'casas' %}">Casas</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="btn btn-outline-primary mx-1" href="{% url 'departamentos' %}">Departamentos</a>
+                                                    </li>
+                                                    <!-- Botón para Casas -->
+                                                </ul>
+                                            </li>
+                                            {% if not user.is_staff %}
+                                            <li class="nav-item">
+                                                <a class="btn btn-outline-primary mx-1" href="{% url 'contactos' %}">Contactos</a>
+                                            </li>
+                                            {% endif %}
+                                            {% if user.is_staff %}
+                                            <li class="nav-item">
+                                                <a class="btn btn-outline-primary mx-1" href="{% url 'clientes_list' %}">Clientes</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="btn btn-outline-primary mx-1" href="{% url 'compras' %}">Compras</a>
+                                            </li>
+                                            {% endif %}
+
+
+
+                                        </ul>
+                                    </div>
+
+                                    <div class="search-container"> 
+                                        <div class="form-container"> 
+                                            <form method="GET" action="{% url 'buscar_propiedades' %}">
+                                                <input type="text" name="q" value="{{ query }}" placeholder="Buscar productos...">
+                                                <button type="submit" class="btn btn-outline-primary-search">
+                                                    <i class="bi bi-search"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        
+
+                                    </div> 
+
+                                    <div>
+                                        {% if user.is_authenticated %}
+                                        <form method="post" action="{% url 'logout' %}">
+                                            {% csrf_token %}
+                                        
+
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="bi bi-door-closed"></i>
+                                            </button>
+                                        </form>
+                                        {% else %}
+                                        <form method="post" action="{% url 'login' %}">
+                                            {% csrf_token %}
+                                            <button class="btn btn-primary" type="submit">
+                                                <i class="bi bi-door-open"></i>
+
+                                            </button>
+
+                                        </form>
+                                        {% endif %}
+                                    </div>
+
+
+                                </div>
+                            </nav>
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+                            <div class="container">
+                                {% block content %}{% endblock %}
+
+                            </div>
+                            
+                            <div class="theme-btn-container"></div>
+                        {% block extra_js %}
+                            <script type="text/javascript">
+                                const themes = [
+                                    {
+                                        background: "#f8f3f3",
+                                        color: "#222222",
+                                        primaryColor: "#20B2AA"
+                                    },
+                                    {
+                                        name: "Gris Intenso",
+                                        background: "#e0e0e0", // Un gris más marcado
+                                        color: "#333333",      // Texto en gris oscuro para buen contraste
+                                        primaryColor: "#80CBC4" // Conservando el tono suave de teal
+                                    },
+                                
+                                    
+
+                                    {
+                                        name: "Oscuro Gris",
+                                        background: "#2C2C2C",  // Gris oscuro
+                                        color: "#FFFFFF",
+                                        primaryColor: "#40E0D0"
+                                    },
 
 
 
@@ -335,36 +389,38 @@
 
 
 
-        ];
+                                ];
 
-        const setTheme = (theme) => {
-            const root = document.querySelector(":root");
-            root.style.setProperty("--background", theme.background);
-            root.style.setProperty("--color", theme.color);
-            root.style.setProperty("--primary-color", theme.primaryColor);
-            root.style.setProperty("--glass-color", theme.glassColor);
-        };
+                                const setTheme = (theme) => {
+                                    const root = document.querySelector(":root");
+                                    root.style.setProperty("--background", theme.background);
+                                    root.style.setProperty("--color", theme.color);
+                                    root.style.setProperty("--primary-color", theme.primaryColor);
+                                    root.style.setProperty("--glass-color", theme.glassColor);
+                                };
 
-        const displayThemeButtons = () => {
-            const btnContainer = document.querySelector(".theme-btn-container");
-            themes.forEach((theme) => {
-                const div = document.createElement("div");
-                div.className = "theme-btn";
-                div.style.cssText = `background: ${theme.background}; width: 25px; height: 25px`;
-                btnContainer.appendChild(div);
-                div.addEventListener("click", () => setTheme(theme));
-            });
-        };
+                                const displayThemeButtons = () => {
+                                    const btnContainer = document.querySelector(".theme-btn-container");
+                                    themes.forEach((theme) => {
+                                        const div = document.createElement("div");
+                                        div.className = "theme-btn";
+                                        div.style.cssText = `background: ${theme.background}; width: 25px; height: 25px`;
+                                        btnContainer.appendChild(div);
+                                        div.addEventListener("click", () => setTheme(theme));
+                                    });
+                                };
 
-        displayThemeButtons();
+                                displayThemeButtons();
 
-        function changeTheme(theme) {
-            fetch(`/set-theme/${theme}/`)  // Llama a la vista de Django para guardar la preferencia
-                .then(() => {
-                    let themeFile = theme === "dark" ? "dark-theme.css" : "light-theme.css";
-                    document.getElementById("theme-link").href = themeFile;
-                });
-        }
-    </script>
-    
-{% endblock extra_js %} 
+                                function changeTheme(theme) {
+                                    fetch(`/set-theme/${theme}/`)  // Llama a la vista de Django para guardar la preferencia
+                                        .then(() => {
+                                            let themeFile = theme === "dark" ? "dark-theme.css" : "light-theme.css";
+                                            document.getElementById("theme-link").href = themeFile;
+                                        });
+                                }
+                            </script>
+                            
+                        {% endblock extra_js %}
+                    </body>
+                    </html>

@@ -27,12 +27,9 @@ def is_staff(user):
 
 @login_required
 @user_passes_test(is_staff)
-def clientes(request):
-    return render(request, 'clientes.html')
-
 def clientes_list(request):
     clientes = Cliente.objects.all()
-    return render(request, "clientes.html", {"clientes": clientes})
+    return render(request, 'clientes.html', {'clientes': clientes})
 
 def cliente_create(request):
     if request.method == 'POST':
@@ -44,8 +41,8 @@ def cliente_create(request):
         form = ClienteForm()
     return render(request, 'cliente_form.html', {'form': form})
 
-def cliente_edit(request, cliente_id):
-    cliente = get_object_or_404(Cliente, id=cliente_id)
+def cliente_update(request, pk):
+    cliente = get_object_or_404(Cliente, pk=pk)
     if request.method == 'POST':
         form = ClienteForm(request.POST, instance=cliente)
         if form.is_valid():
@@ -55,8 +52,8 @@ def cliente_edit(request, cliente_id):
         form = ClienteForm(instance=cliente)
     return render(request, 'cliente_form.html', {'form': form})
 
-def cliente_delete(request, cliente_id):
-    cliente = get_object_or_404(Cliente, id=cliente_id)
+def cliente_delete(request, pk):
+    cliente = get_object_or_404(Cliente, pk=pk)
     if request.method == 'POST':
         cliente.delete()
         return redirect('clientes_list')

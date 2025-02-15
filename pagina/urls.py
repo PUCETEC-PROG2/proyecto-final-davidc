@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.contrib import admin
@@ -10,10 +12,10 @@ urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
     path('set-theme/<str:theme>/', views.set_theme, name='set_theme'),
-    path('clientes/', views.clientes_list, name='clientes_list'),
     path('clientes/create/', views.cliente_create, name='cliente_create'),
-    path('clientes/edit/<int:cliente_id>/', views.cliente_edit, name='cliente_edit'),
-    path('clientes/delete/<int:cliente_id>/', views.cliente_delete, name='cliente_delete'),
+    path('clientes/<int:pk>/edit/', views.cliente_update, name='cliente_edit'),
+    path('clientes/<int:pk>/delete/', views.cliente_delete, name='cliente_delete'),
+    path('clientes/', views.clientes_list, name='clientes_list'),
     path('compras/', views.compras, name='compras'),
     #path('compras/create/', views.compra_create, name='compras_create'),
     path('compras/<int:compra_id>/', views.compra_detail, name='compras_detail'),
@@ -24,4 +26,6 @@ urlpatterns = [
     path('buscar/', views.buscar_propiedades, name='buscar_propiedades'),
     path('contactos/', views.contactos, name='contactos'),
 
-]   
+]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
