@@ -22,5 +22,6 @@ urlpatterns = [
     path('casas/', views.casas, name='casas'),
     path('casas/<slug:slug>', views.display_casa, name='display_casa'),
     path('buscar/', views.buscar_propiedades, name='buscar_propiedades'),
+    path('contactos/', views.contactos, name='contactos'),
 
 ]   

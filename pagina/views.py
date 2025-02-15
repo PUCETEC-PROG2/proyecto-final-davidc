@@ -162,3 +162,6 @@ def crear_compra(request):
     })
 
 
+def contactos(request):
+    return render(request, 'contactos.html')
+
